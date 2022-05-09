@@ -1,0 +1,54 @@
+<form *ngIf="showMe_register" #simpleForm="ngForm" (ngSubmit)="getValues(simpleForm.value)" align="center">
+    <h1>Registration Form</h1>
+    <table align="center">
+        <tr>
+            <th>Username : </th>
+            <th><input type="text" id="un" ngModel name="username" autocomplete="off" autofocus size="25"><span
+                    id="span1"></span></th>
+        </tr>
+        <tr>
+            <th>Password : </th>
+            <th><input type="password" id="pwd" ngModel name="password" autocomplete="off" size="25"><span
+                    id="span2"></span></th>
+        </tr>
+        <tr>
+            <th>Mobile no. : </th>
+            <th><input type="text" id="mob" ngModel name="mobile" autocomplete="off" size="25"><span id="span3"></span>
+            </th>
+        </tr>
+        <tr>
+            <th>Gender : </th>
+            <th>
+                <input type="radio" ngModel name="gender" value="Male">Male
+                <input type="radio" ngModel name="gender" value="Female">Female
+            </th>
+        </tr>
+    </table>
+    <br>
+    <button class="btn btn-primary field but" (click)="getValues(simpleForm.value)">Register</button>
+    <br>
+    <button class="btn btn-primary field but" (click)="toggleform()">Login</button>
+</form>
+<!--(ngSubmit)="getValues(simpleForm.value)"-->
+<form *ngIf="showMe_login" #simpleform="ngForm">
+    <h1 style="text-align: left;">Login</h1>
+    <label class="label">Username: </label>
+    <br><br>
+    <input type="text" ngModel name="uname" placeholder="Enter Username" class="field">
+    <br><br>
+    <label class="label">Password: </label>
+    <br><br>
+    <input type="password" ngModel name="pass" placeholder="Enter Password" class="field">
+    <br><br>
+    <button class="btn btn-primary field" (click)="getValues_login(simpleform.value)">Login</button>
+    <br><br>
+    <button class="btn btn-primary field" (click)="view_profile()">View Profile</button>
+</form>
+<div *ngIf="showMe_profile">
+
+    <h1 style="text-align:left" id="title"></h1>
+    <h3><span class="val" id="usern"></span></h3>
+    <h3><span class="val" id="passw"></span></h3>
+    <h3><span class="val" id="mobb"></span></h3>
+
+</div>

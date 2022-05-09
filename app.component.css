@@ -1,0 +1,40 @@
+table {
+    padding: 8px;
+    text-align: left;
+    background-color: gainsboro;
+    border: 7px double Black;
+
+}
+
+tr,
+th {
+    border: 2px solid Black;
+}
+
+span {
+    color: red;
+}
+
+th {
+    text-align: left;
+    font-size: 24px;
+}
+
+button {
+    text-align: center;
+    font-size: 28px;
+    font-weight: bolder;
+    color: red;
+}
+
+h1 {
+    text-align: center;
+    font-weight: bolder;
+    text-decoration: underline;
+}
+
+body {
+    background-color: floralwhite;
+    border: 6px double Black;
+    padding: 16px;
+}
