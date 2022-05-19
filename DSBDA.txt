@@ -1,0 +1,132 @@
+import java.io.IOException;
+import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.fs.FSDataInputStream;
+import org.apache.hadoop.fs.FileSystem;
+import org.apache.hadoop.fs.Path;    
+import org.apache.hadoop.io.IntWritable;    
+import org.apache.hadoop.io.Text;
+import org.apache.hadoop.mapreduce.Job;    
+import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
+import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
+
+public class wdriver
+{
+	@SuppressWarnings("deprecation")
+	public static void main(String[] args) throws IOException, ClassNotFoundException, InterruptedException{
+		Configuration c = new Configuration();
+		Job job = new Job(c,"WordCount");
+		job.setJarByClass(wdriver.class);
+		job.setMapperClass(wmapper.class); 
+		job.setReducerClass(wreducer.class);
+		job.setOutputKeyClass(Text.class);
+		job.setOutputValueClass(IntWritable.class);
+		FileInputFormat.addInputPath(job, new Path(args[0]));
+		FileOutputFormat.setOutputPath(job, new Path(args[1]));
+		job.waitForCompletion(true);
+
+		System.out.println("Done");
+
+		c.set("fs.defaultFS", "hdfs://localhost:9000");
+		FileSystem fs = FileSystem.get(c);
+		int max=0;
+		String str = null;
+		String ip = "";
+		String count[]=null;
+		int a = 0;
+		FSDataInputStream in = fs.open(new Path(args[1]+"/part-r-00000"));
+		while((str=in.readLine())!=null)
+		{
+			count = str.split("\t");
+			a = Integer.parseInt((count[1]));
+			if(a>max)
+			{
+					max = a;
+					ip = count[0];
+			}
+		}
+		System.out.println("IP address logged in maximum times is: "+ip+" for " +max+" times");
+	}
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+import java.io.IOException;    
+
+import org.apache.hadoop.io.IntWritable;    
+import org.apache.hadoop.io.LongWritable;    
+import org.apache.hadoop.io.Text;    
+import org.apache.hadoop.mapreduce.Mapper;    
+import java.io.*;
+
+public class wmapper extends Mapper<LongWritable,Text,Text,IntWritable>{    
+       
+    public void map(LongWritable key, Text value,Context con) throws IOException,InterruptedException{    
+    	String[] words= value.toString().split(",");
+    	for(String word:words)
+    	{
+    		if(word.startsWith("10"))
+    				{
+    					con.write(new Text(word),new IntWritable(1));
+    			
+    				}
+    		
+    	}
+    	
+    	//System.out.println(words);
+    //	String s= words[0].toString();
+//    	if(words[0].startsWith("10"))
+//    	{
+//    		con.write(new Text(words[0]),new IntWritable(1)); 
+//    	}
+    	
+    	
+    }    
+    
+}
+
+
+
+
+
+
+
+
+
+
+//package com. WC;
+import java.io.IOException;
+import org.apache.hadoop.io.IntWritable; 
+import org.apache.hadoop. io.Text;
+import org.apache.hadoop.mapreduce.Reducer;
+public class wreducer extends Reducer<Text, IntWritable, Text, IntWritable> { 
+	public void reduce(Text word, Iterable<IntWritable> values, Context con) throws IOException, InterruptedException
+	{
+		int sum=0;
+			for(IntWritable value :values)
+				sum +=value.get();
+				con.write(word, new IntWritable(sum));
+	}
+
+}
+
+
+
+
+
